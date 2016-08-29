@@ -15,6 +15,8 @@ var boxShiftClass = 'col-sm-4 col-sm-offset-4 rowbox';
 var div = '<div>';
 var buttonStr = '<button class="btn btn-primary btn-lg">';
 var timeRemaining = '<h4>The time remaining: <span id="timer"></span></h4>';
+//var correctMsg = '<h3 style="color: green">Correct</h3>';
+//var incorrectMsg = '<h3 style="color: red">Incorrect</h3>';
 
 
 
@@ -47,6 +49,7 @@ var timer = {
         $('#timer').html(display);
         if (timer.time == 0) {
         	timer.reset();
+        	processTimeUp();
         }
     },
 
@@ -70,15 +73,7 @@ var timer = {
 
 // Functions
 
-function createElement(cls, id) {
-	var ele = $('<div>').addClass(cls).attr('id', id);
-	return ele;
-}
 
-function createButton(id, text) {
-	var button = $(buttonStr).attr('id', id).text(text);
-	return button;
-}
 
 function createInitialFrame() {
 	var box, row1, row2, button, obj;
@@ -104,7 +99,7 @@ function createInitialFrame() {
 	$('#bottombox').append(button);
 	addListener('#start', 'click', clickStartButton);
 }
-
+// Even handling
 function addListener(sel, event, fn) {
     $(sel).on(event, fn);
 }
@@ -128,14 +123,33 @@ function clickStartButton() {
 	createBoxContents();
 }
 function clickChoice() {
+	var result, comment;
 	var id = $(this).attr('id');
 	$(this).removeClass('choice-focus');
 	if (id == movie.answer) {
 		$(this).addClass('choice-correct');
-	} else {
+		result = 'Correct';
+		wins++;
+		gamesRemaining--;
+	} else { 
 		$(this).addClass('choice-incorrect');
+
+		// find the correct answer and mark it 'choice-correct'
+		var siblings = $(this).siblings();
+		for (var i = 0; i < siblings.length; i++) {
+			if ($(siblings[i]).attr('id') == movie.answer) {
+				$(siblings[i]).addClass('choice-correct');
+				break;
+			}
+		}
+		result = 'Incorrect';
+		losses++;
+		gamesRemaining--;
 	}
 
+	updateLeftBoxContent();
+	updateRightBoxContent(result, movie);
+	timer.stop();
 	removeListeners();
 
 }
@@ -147,11 +161,39 @@ function mouseleaveChoice() {
 	$(this).removeClass('choice-focus');
 
 }
+function processTimeUp() {
+	unanswered++;
+	gamesRemaining--;
+	updateLeftBoxContent();
+	updateRightBoxContent('Time Up', movie);
+	var children = $('#choices').children();
+	console.log(children);
+
+	for (var i = 0; i < children.length; i++) {
+		if ($(children[i]).attr('id') == movie.answer) {
+			console.log(children[i].id);
+			$(children[i]).addClass('choice-correct');
+			break;
+		}
+	}
+
+	removeListeners();
+}
+// DOM manipulation
+function createElement(cls, id) {
+	var ele = $('<div>').addClass(cls).attr('id', id);
+	return ele;
+}
+
+function createButton(id, text) {
+	var button = $(buttonStr).attr('id', id).text(text);
+	return button;
+}
 function createBoxContents() {
 	movie = getMovie();
 	createLeftBoxContent();
 	createCenterBoxContent(movie);
-	createRightBoxContent();
+	//createRightBoxContent();
 	createBottomBoxContent(movie);
 	timer.start();
 }
@@ -185,15 +227,33 @@ function updateCenterBoxContent(movie) {
 	$('#timer').html(str);
 	$('#question').html(movie.question);
 }
-function createRightBoxContent() {
-	var obj = createElement('well', 'result');
-	$('#rightbox').append(obj);
-	//obj = createElement('well', 'comment');
-	//$('#rightbox').append(obj);
+function updateRightBoxContent(result, movie) {
+	var resultStr = createResult(result, movie.answer);
+	$('#rightbox').append($(resultStr));
+	var comment = createComment(movie.comment);
+	$('#rightbox').append($(comment));
 }
-function updateRightBox() {
+function createResult(result, answer) {
+	var msg = '<h3 style="color: ';
+	if (result == 'Correct') {
+		msg += 'green' + '">' + result +'</h3>';
+	} else {
+		msg += 'red' + '">' + result +'</h3>';
+		msg += '<p>Answer: ' + answer + '</p>'; 
+	}
+	return msg;
+}
+function createComment(comment) {
+	//var msg = '<p></p><p>' + comment + '</p>';
+	return ('<p></p><p>' + comment + '</p>');
+}
+//function createRightBoxContent() {
+//	var obj = $('<h3 id="result"><h3>');
+//	obj = $('<p id="comment"></p>');
+//	$('#rightbox').append(obj);
+//function updateRightBox() {
 
-}
+//}
 function createBottomBoxContent(movie) {
 	var ul = $('<ul class="list-group text-center" id="choices">');
 	for (var i = 0; i < movie.choices.length; i++) {
@@ -204,6 +264,7 @@ function createBottomBoxContent(movie) {
 	$('#bottombox').append(ul);
 	addListeners();
 }
+// Helper functions
 
 function loadData() {
 	var arr = [];

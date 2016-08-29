@@ -37,6 +37,14 @@
 	background-color: red;
 }
 
+#rightbox h3 {
+	text-align: center;
+}
+/*
+#rightbox p {
+	font-size: 20px;
+}
+*/
 .illustration img {
     max-width: 98%;
     height: auto;
