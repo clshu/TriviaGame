@@ -23,6 +23,20 @@
 #leftbox p {
 	font-size: 24px;
 }
+
+.choice-focus {
+	color: white;
+	background-color: blue;
+}
+.choice-correct {
+	color: white;
+	background-color: green;
+}
+.choice-incorrect {
+	color: white;
+	background-color: red;
+}
+
 .illustration img {
     max-width: 98%;
     height: auto;
