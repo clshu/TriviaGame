@@ -1,12 +1,15 @@
 // Global Variables
 
 // Contants
+var maxTime = 20; // in seconds
+var delaytime = 5; // in seconds
 var boxClass = 'col-sm-4 rowbox';
 var boxShiftClass = 'col-sm-4 col-sm-offset-4 rowbox';
 var div = '<div>';
 var buttonStr = '<button class="btn btn-primary btn-lg">';
 var timeRemaining = '<h4>The time remaining: <span id="timer"></span></h4>';
-// var spanStr = '<span class="glyphicon glyphicon-ok-sign">';
+
+// ===== Execution ====
 
 $(document).ready(readyFn);
 
@@ -15,19 +18,69 @@ function readyFn() {
 	createInitialFrame();
 }
 
+// Objects
+var timer = {
+	time: maxTime,
+	id: null,
+
+	reset: function () {
+		timer.stop();
+		timer.time = maxTime;
+	},
+	start: function(){
+		// make sure only one copy timer
+        if (timer.id == null) {
+             timer.id = setInterval(timer.countDown, 1000);
+        }
+      
+    },
+    stop: function(){
+        // TODO: Use clearInterval to stop the count here.
+        if (timer.id != null) {
+            clearInterval(timer.id);
+            timer.id = null;
+        }
+    },    
+    countDown: function(){
+        // TODO: decrement time by 1, remember we cant use "this" here.
+        timer.time--;
+
+        // TODO: Get the current time, pass that into the timer.timeConverter function, 
+        //       and save the result in a variable.
+        var display = timer.timeConverter(timer.time);
+        // TODO: Use the variable you just created to show the converted time in the "display" div.
+        $('#timer').html(display);
+        if (timer.time == 0) {
+        	timer.reset();
+        }
+    },
+	// THIS FUNCTION IS DONE FOR YOU!
+    // You do not need to touch it.
+    timeConverter: function(t){
+        // Takes the current time in seconds and convert it to minutes and seconds (mm:ss).
+        var minutes = Math.floor(t/60);
+        var seconds = t - (minutes * 60);
+        if (seconds < 10){
+            seconds = "0" + seconds;
+        }
+        if (minutes === 0){
+            minutes = "00";
+        } else if (minutes < 10){
+            minutes = "0" + minutes;
+        }
+
+        return minutes + ":" + seconds;
+    }
+
+}
+
 function createElement(cls, id) {
 	var ele = $('<div>').addClass(cls).attr('id', id);
 	return ele;
 }
 
 function createButton(id, text) {
-
 	var button = $(buttonStr).attr('id', id).text(text);
-	//var row = createElement('row', 'buttonRow');
-	//var col = createElement('col-sm-4 col-sm-offset-4', 'buttonCol');
-	//col.append(button);
-	//row.append(col);
-	
 	return button;
 }
 
@@ -50,10 +103,6 @@ function createInitialFrame() {
 	box = createElement(boxShiftClass, 'bottombox');
 	row2.append(box);
 
-	//obj = $(timeRemaining);
-	//$('#centerbox').append(obj);
-	// create button row
-	//obj = createElement
 	$('#bottombox').addClass('text-center');
 	button = createButton('start', 'Start !');
 	$('#bottombox').append(button);
@@ -71,6 +120,8 @@ function clickStartButton() {
 }
 function createBoxContents() {
 	createLeftBoxContent();
+	createCenterBoxContent();
+	timer.start();
 }
 function createLeftBoxContent() {
 	var line1 = '<p>Wins: <span id="wins"></span></p><p></p>';
@@ -81,6 +132,14 @@ function createLeftBoxContent() {
 	$('#leftbox').append($(line2));
 	$('#leftbox').append($(line3));
 	$('#leftbox').append($(line4));
+}
+function createCenterBoxContent() {
+	
+	$('#centerbox').append($(timeRemaining));
+	var obj = createElement('well', 'question');
+	$('#centerbox').append(obj);
+	var str = timer.timeConverter(maxTime);
+	$('#timer').html(str);
 }
 
 

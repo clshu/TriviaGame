@@ -20,7 +20,9 @@
 #choices {
 	margin-top: 10px;
 }
-
+#leftbox p {
+	font-size: 24px;
+}
 .illustration img {
     max-width: 98%;
     height: auto;
