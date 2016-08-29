@@ -1,4 +1,10 @@
 // Global Variables
+var isFirstTime = true;
+var movies = [];
+var wins = 0;
+var losses = 0;
+var unanswered = 0;
+var gamesRemaining = 10;
 
 // Contants
 var maxTime = 20; // in seconds
@@ -9,14 +15,7 @@ var div = '<div>';
 var buttonStr = '<button class="btn btn-primary btn-lg">';
 var timeRemaining = '<h4>The time remaining: <span id="timer"></span></h4>';
 
-// ===== Execution ====
 
-$(document).ready(readyFn);
-
-function readyFn() {
-	
-	createInitialFrame();
-}
 
 // Objects
 var timer = {
@@ -73,6 +72,8 @@ var timer = {
     }
 
 }
+
+// Functions
 
 function createElement(cls, id) {
 	var ele = $('<div>').addClass(cls).attr('id', id);
@@ -132,6 +133,10 @@ function createLeftBoxContent() {
 	$('#leftbox').append($(line2));
 	$('#leftbox').append($(line3));
 	$('#leftbox').append($(line4));
+	$('#wins').html(wins);
+	$('#losses').html(losses);
+	$('#unanswered').html(unanswered);
+	$('#gamesRemaining').html(gamesRemaining);
 }
 function createCenterBoxContent() {
 	
@@ -141,7 +146,28 @@ function createCenterBoxContent() {
 	var str = timer.timeConverter(maxTime);
 	$('#timer').html(str);
 }
+function loadData() {
+	var arr = [];
+	for (var i = 0; i < gameData.length; i++) {
+		arr.push(gameData[i]);
+	}
+	return arr;
+}
+// ===== Execution ====
 
+$(document).ready(readyFn);
+
+function readyFn() {
+
+
+	if (isFirstTime) {
+		movies = loadData();
+		isFirstTime = false;
+	}
+		
+	createInitialFrame();
+
+}
 
 // Game Data
 
