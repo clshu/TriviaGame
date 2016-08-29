@@ -6,6 +6,7 @@ var losses = 0;
 var unanswered = 0;
 var gamesRemaining = 0;
 var movie = null;
+var timeOutId = null;
 
 // Contants
 var maxTime = 5; // in seconds
@@ -116,7 +117,10 @@ function removeListeners() {
 	removeListener('.choice', 'mouseleave', mouseleaveChoice);
 	removeListener('.choice', 'click', clickChoice);
 }
-
+// testing purpose only
+function clickLeftBox() {
+	startNewQuestion();
+}
 function clickStartButton() {
 	// remove start button
 	$(this).remove();
@@ -130,7 +134,7 @@ function clickChoice() {
 		$(this).addClass('choice-correct');
 		result = 'Correct';
 		wins++;
-		gamesRemaining--;
+
 	} else { 
 		$(this).addClass('choice-incorrect');
 
@@ -144,14 +148,15 @@ function clickChoice() {
 		}
 		result = 'Incorrect';
 		losses++;
-		gamesRemaining--;
 	}
-
+	gamesRemaining--;
 	updateLeftBoxContent();
 	updateRightBoxContent(result, movie);
 	timer.stop();
 	removeListeners();
-
+	if (timeOutId == null) {
+		timeOutId = setTimeout(startNewQuestion, 5000);
+	}
 }
 function mouseenterChoice() {
 	$(this).addClass('choice-focus');
@@ -178,6 +183,31 @@ function processTimeUp() {
 	}
 
 	removeListeners();
+	if (timeOutId == null) {
+	 	timeOutId = setTimeout(startNewQuestion, 5000);
+	}
+}
+
+function startNewQuestion() {
+	if (timeOutId != null) {
+		clearTimeout(timeOutId);
+		timeOutId = null;
+	}
+	if (gamesRemaining == 0) {
+		//alert('Game Over');
+		$('.rowbox').empty();
+		return;
+	}
+	$('#question').empty();
+	$('#rightbox').empty();
+	$('#bottombox').empty();
+
+	movie = null;
+	movie = getMovie();
+	updateCenterBoxContent(movie);
+	createBottomBoxContent(movie);
+	timer.reset();
+	timer.start();
 }
 // DOM manipulation
 function createElement(cls, id) {
@@ -208,6 +238,7 @@ function createLeftBoxContent() {
 	$('#leftbox').append($(line3));
 	$('#leftbox').append($(line4));
 	updateLeftBoxContent();
+	addListener('#leftbox', 'click', clickLeftBox);
 }
 
 function updateLeftBoxContent() {
