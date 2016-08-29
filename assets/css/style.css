@@ -1,1 +1,31 @@
 /* ___ */
+
+	
+
+#row1, #row2 {
+	height: 250px;
+}
+
+#stats, #result {
+	height: 95%;
+}
+.rowbox {
+	height: 95%;
+	border: 1px solid;
+}
+#question {
+	height: 65%;
+	margin: 10% auto 0 auto;
+}
+#choices {
+	margin-top: 10px;
+}
+.illustration img {
+    max-width: 98%;
+    height: auto;
+    width: auto;
+    padding: 8px;
+    border: 2px solid #f2f2f2;
+    background-color: #fefefe;
+    border-radius: 8px;
+}
