@@ -1,10 +1,88 @@
+// Global Variables
+
+// Contants
+var boxClass = 'col-sm-4 rowbox';
+var boxShiftClass = 'col-sm-4 col-sm-offset-4 rowbox';
+var div = '<div>';
+var buttonStr = '<button class="btn btn-primary btn-lg">';
+var timeRemaining = '<h4>The time remaining: <span id="timer"></span></h4>';
+// var spanStr = '<span class="glyphicon glyphicon-ok-sign">';
 
 $(document).ready(readyFn);
 
 function readyFn() {
-	console.log("Hi it's working");
-	console.log(gameData[1]);
+	
+	createInitialFrame();
 }
+
+function createElement(cls, id) {
+	var ele = $('<div>').addClass(cls).attr('id', id);
+	return ele;
+}
+
+function createButton(id, text) {
+
+	var button = $(buttonStr).attr('id', id).text(text);
+	//var row = createElement('row', 'buttonRow');
+	//var col = createElement('col-sm-4 col-sm-offset-4', 'buttonCol');
+	//col.append(button);
+	//row.append(col);
+	
+	return button;
+}
+
+function createInitialFrame() {
+	var box, row1, row2, button, obj;
+	// create 2 rows
+	row1 = createElement('row', 'row1');
+	$('#wrapper').append(row1);
+
+	row2 = createElement('row', 'row2');
+	$('#wrapper').append(row2);
+	// row1 boxes
+	box = createElement(boxClass, 'leftbox');
+	row1.append(box);
+	box = createElement(boxClass, 'centerbox');
+	row1.append(box);
+	box = createElement(boxClass, 'rightbox');
+	row1.append(box);
+	// row2 box
+	box = createElement(boxShiftClass, 'bottombox');
+	row2.append(box);
+
+	//obj = $(timeRemaining);
+	//$('#centerbox').append(obj);
+	// create button row
+	//obj = createElement
+	$('#bottombox').addClass('text-center');
+	button = createButton('start', 'Start !');
+	$('#bottombox').append(button);
+	addListener('#start', 'click', clickStartButton);
+}
+
+function addListener(sel, event, fn) {
+    $(sel).on(event, fn);
+}
+
+function clickStartButton() {
+	// remove start button
+	$(this).remove();
+	createBoxContents();
+}
+function createBoxContents() {
+	createLeftBoxContent();
+}
+function createLeftBoxContent() {
+	var line1 = '<p>Wins: <span id="wins"></span></p><p></p>';
+	var line2 = '<p>Losses: <span id="losses"></span></p><p></p>';
+	var line3 = '<p>Unanswered: <span id="unanswered"></span></p><p></p>';
+	var line4 = '<p>Games Remaining: <span id="gamesRemaining"></span></p><p></p>';
+	$('#leftbox').append($(line1));
+	$('#leftbox').append($(line2));
+	$('#leftbox').append($(line3));
+	$('#leftbox').append($(line4));
+}
+
 
 // Game Data
 
