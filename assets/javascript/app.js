@@ -192,9 +192,12 @@ function processTimeUp() {
 	var children = $('#choices').children();
 
 	for (var i = 0; i < children.length; i++) {
+		// Use both way to access children for practice
+		if (children.eq(i).hasClass('choice-focus')) {
+			children.eq(i).removeClass('choice-focus');
+		}
 		if ($(children[i]).attr('id') == movie.answer) {
 			$(children[i]).addClass('choice-correct');
-			break;
 		}
 	}
 
