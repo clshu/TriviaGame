@@ -226,9 +226,9 @@ function startNewQuestion() {
 	movie = getMovie();
 
 	updateCenterBoxContent(movie);
-	createImgBoxContent('#imgbox1', 'img1');
+	//createImgBoxContent('#imgbox1', 'img1');
 	createBottomBoxContent(movie);
-	createImgBoxContent('#imgbox2', 'img2');
+	//createImgBoxContent('#imgbox2', 'img2');
 	
 	timer.reset();
 	timer.start();
@@ -248,9 +248,9 @@ function createBoxContents() {
 	createLeftBoxContent();
 	createCenterBoxContent(movie);
 	//createRightBoxContent();
-	createImgBoxContent('#imgbox1', 'img1');
+	//createImgBoxContent('#imgbox1', 'img1');
 	createBottomBoxContent(movie);
-	createImgBoxContent('#imgbox2', 'img2');
+	//createImgBoxContent('#imgbox2', 'img2');
 	timer.start();
 }
 
@@ -259,7 +259,7 @@ function createLeftBoxContent() {
 	var line1 = '<p>Wins: <span id="wins"></span></p><p></p>';
 	var line2 = '<p>Losses: <span id="losses"></span></p><p></p>';
 	var line3 = '<p>Unanswered: <span id="unanswered"></span></p><p></p>';
-	var line4 = '<p>Games Remaining: <span id="gamesRemaining"></span></p><p></p>';
+	var line4 = '<p>Questions Remaining: <span id="gamesRemaining"></span></p><p></p>';
 	$('#leftbox').append(obj);
 	obj.append($(line1));
 	obj.append($(line2));
@@ -324,29 +324,25 @@ function createBottomBoxContent(movie) {
 }
 
 function createImgBoxContent(cls, id) {
-	var thumbnail = $('<div>').addClass('thumbnail').attr('id', id);
-	$(cls).append(thumbnail);
-}
-function createImg(flag, movie) {
 	var path;
-	if (flag == 0) {
+	var thumbnail = $('<div>').addClass('thumbnail').attr('id', id);
+	if (cls == "#imgbox1") {
 		path = imgPath + movie.img1;
-	} else {
+	} else if (cls == "#imgbox2") {
 		path = imgPath + movie.img2;
 	}
 	var img = $('<img>').attr('src', path).attr('alt', movie.answer);
-	return img;
+	thumbnail.append(img);
+	$(cls).append(thumbnail);
 }
 
 function updateImgBox(movie) {
 	if (movie == null) {
-		$('#img1').empty();
-		$('#img2').empty();
+		$('#imgbox1').empty();
+		$('#imgbox2').empty();
 	} else {
-		var img = createImg(0, movie);
-		$('#img1').append(img);
-		img = createImg(1, movie);
-		$('#img2').append(img);
+		createImgBoxContent("#imgbox1", "img1"); 
+		createImgBoxContent("#imgbox2", "img2");
 	}
 }
 
