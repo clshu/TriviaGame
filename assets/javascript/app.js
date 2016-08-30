@@ -14,8 +14,8 @@ var delaytime = 5; // in seconds
 var boxClass = 'col-sm-4 rowbox';
 //var boxShiftClass = 'col-sm-4 col-sm-offset-4 rowbox';
 var div = '<div>';
-var buttonStr = '<button class="btn btn-primary btn-lg">';
-var timeRemaining = '<h4>The time remaining: <span id="timer"></span></h4>';
+var buttonStr = '<button class="btn btn-warning btn-lg">';
+var timeRemaining = '<p>The time remaining: <span id="timer"></span></p>';
 //var correctMsg = '<h3 style="color: green">Correct</h3>';
 //var incorrectMsg = '<h3 style="color: red">Incorrect</h3>';
 var imgPath = 'assets/images/';
@@ -255,14 +255,16 @@ function createBoxContents() {
 }
 
 function createLeftBoxContent() {
+	var obj = createElement('well', 'leftbox-container');
 	var line1 = '<p>Wins: <span id="wins"></span></p><p></p>';
 	var line2 = '<p>Losses: <span id="losses"></span></p><p></p>';
 	var line3 = '<p>Unanswered: <span id="unanswered"></span></p><p></p>';
 	var line4 = '<p>Games Remaining: <span id="gamesRemaining"></span></p><p></p>';
-	$('#leftbox').append($(line1));
-	$('#leftbox').append($(line2));
-	$('#leftbox').append($(line3));
-	$('#leftbox').append($(line4));
+	$('#leftbox').append(obj);
+	obj.append($(line1));
+	obj.append($(line2));
+	obj.append($(line3));
+	obj.append($(line4));
 	updateLeftBoxContent();
 	addListener('#leftbox', 'click', clickLeftBox);
 }
@@ -274,8 +276,11 @@ function updateLeftBoxContent() {
 	$('#gamesRemaining').html(gamesRemaining);
 }
 function createCenterBoxContent(movie) {
-	$('#centerbox').append($(timeRemaining));
-	var obj = createElement('well', 'question');
+	var obj = createElement('well','remaining');
+	obj.append($(timeRemaining));
+	$('#centerbox').append(obj);
+
+	obj = createElement('well', 'question');
 	$('#centerbox').append(obj);
 	updateCenterBoxContent(movie);	
 }
@@ -285,17 +290,19 @@ function updateCenterBoxContent(movie) {
 	$('#question').html(movie.question);
 }
 function updateRightBoxContent(result, movie) {
+	var obj = createElement('well', 'rightbox-container');
 	var resultStr = createResult(result, movie.answer);
-	$('#rightbox').append($(resultStr));
+	obj.append($(resultStr));
 	var comment = createComment(movie.comment);
-	$('#rightbox').append($(comment));
+	obj.append($(comment));
+	$('#rightbox').append(obj);
 }
 function createResult(result, answer) {
-	var msg = '<h3 style="color: ';
+	var msg = '<h4 style="color: ';
 	if (result == 'Correct') {
-		msg += 'green' + '">' + result +'</h3>';
+		msg += 'green' + '">' + result +'</h4>';
 	} else {
-		msg += 'red' + '">' + result +'</h3>';
+		msg += 'red' + '">' + result +'</h4>';
 		msg += '<p>Answer: ' + answer + '</p>'; 
 	}
 	return msg;
@@ -317,20 +324,32 @@ function createBottomBoxContent(movie) {
 }
 
 function createImgBoxContent(cls, id) {
-	var thumbnail = $('<div>').addClass('thumbnail');
-	var img = $('<img>').attr('id', id).attr('src', '').attr('alt', '');
-	thumbnail.append(img);
+	var thumbnail = $('<div>').addClass('thumbnail').attr('id', id);
 	$(cls).append(thumbnail);
 }
+function createImg(flag, movie) {
+	var path;
+	if (flag == 0) {
+		path = imgPath + movie.img1;
+	} else {
+		path = imgPath + movie.img2;
+	}
+	var img = $('<img>').attr('src', path).attr('alt', movie.answer);
+	return img;
+}
+
 function updateImgBox(movie) {
 	if (movie == null) {
-		$('#img1').attr('src', '').attr('alt', '');
-		$('#img2').attr('src', '').attr('alt', '');
+		$('#img1').empty();
+		$('#img2').empty();
 	} else {
-		$('#img1').attr('src', imgPath + movie.img1).attr('alt', movie.answer);
-		$('#img2').attr('src', imgPath + movie.img2).attr('alt', movie.answer);
+		var img = createImg(0, movie);
+		$('#img1').append(img);
+		img = createImg(1, movie);
+		$('#img2').append(img);
 	}
 }
+
 // Helper functions
 
 function loadData() {

@@ -1,6 +1,7 @@
-/* ___ */
-
-	
+.container {
+	width: 100%;
+	background-image: url('../images/movie.jpg');
+}
 
 #row1, #row2 {
 	height: 250px;
@@ -11,7 +12,16 @@
 }
 .rowbox {
 	height: 95%;
-	border: 1px solid;
+	/* border: 1px solid; */
+}
+#remaining {
+	height: 25%;
+	font-size: 18px;
+	font-weight: bolder;
+	font-style: italic;
+}
+.hidden {
+	display: none;
 }
 #question {
 	height: 65%;
@@ -37,7 +47,7 @@
 	background-color: red;
 }
 
-#rightbox h3 {
+#rightbox h4 {
 	text-align: center;
 }
 /*
