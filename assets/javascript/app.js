@@ -1,10 +1,10 @@
 // Global Variables
-var isFirstTime = true;
+//var isFirstTime = true;
 var movies = [];
-var wins = 0;
-var losses = 0;
-var unanswered = 0;
-var gamesRemaining = 0;
+var wins;
+var losses;
+var unanswered;
+var gamesRemaining;
 var movie = null;
 var timeOutId = null;
 
@@ -12,12 +12,13 @@ var timeOutId = null;
 var maxTime = 5; // in seconds
 var delaytime = 5; // in seconds
 var boxClass = 'col-sm-4 rowbox';
-var boxShiftClass = 'col-sm-4 col-sm-offset-4 rowbox';
+//var boxShiftClass = 'col-sm-4 col-sm-offset-4 rowbox';
 var div = '<div>';
 var buttonStr = '<button class="btn btn-primary btn-lg">';
 var timeRemaining = '<h4>The time remaining: <span id="timer"></span></h4>';
 //var correctMsg = '<h3 style="color: green">Correct</h3>';
 //var incorrectMsg = '<h3 style="color: red">Incorrect</h3>';
+var imgPath = 'assets/images/';
 
 
 
@@ -73,8 +74,13 @@ var timer = {
 }
 
 // Functions
-
-
+function initialize() {
+	movies = loadData();
+	wins = 0;
+	losses = 0;
+	unanswered = 0;
+	gamesRemaining = movies.length;
+}
 
 function createInitialFrame() {
 	var box, row1, row2, button, obj;
@@ -91,8 +97,12 @@ function createInitialFrame() {
 	row1.append(box);
 	box = createElement(boxClass, 'rightbox');
 	row1.append(box);
-	// row2 box
-	box = createElement(boxShiftClass, 'bottombox');
+	// row2 boxes
+	box = createElement(boxClass, 'imgbox1');
+	row2.append(box);
+	box = createElement(boxClass, 'bottombox');
+	row2.append(box);
+	box = createElement(boxClass, 'imgbox2');
 	row2.append(box);
 	// create start button and add click listener
 	$('#bottombox').addClass('text-center');
@@ -126,6 +136,11 @@ function clickStartButton() {
 	$(this).remove();
 	createBoxContents();
 }
+function clickStartOverButton() {
+	$('.rowbox').empty();
+	initialize();
+	createBoxContents();
+}
 function clickChoice() {
 	var result, comment;
 	var id = $(this).attr('id');
@@ -152,6 +167,8 @@ function clickChoice() {
 	gamesRemaining--;
 	updateLeftBoxContent();
 	updateRightBoxContent(result, movie);
+	updateImgBox(movie);
+
 	timer.stop();
 	removeListeners();
 	if (timeOutId == null) {
@@ -171,12 +188,11 @@ function processTimeUp() {
 	gamesRemaining--;
 	updateLeftBoxContent();
 	updateRightBoxContent('Time Up', movie);
+	updateImgBox(movie);
 	var children = $('#choices').children();
-	console.log(children);
 
 	for (var i = 0; i < children.length; i++) {
 		if ($(children[i]).attr('id') == movie.answer) {
-			console.log(children[i].id);
 			$(children[i]).addClass('choice-correct');
 			break;
 		}
@@ -194,18 +210,26 @@ function startNewQuestion() {
 		timeOutId = null;
 	}
 	if (gamesRemaining == 0) {
-		//alert('Game Over');
-		$('.rowbox').empty();
+		$('#bottombox').empty();
+		var button = createButton('startover', 'Start Over?');
+		$('#bottombox').append(button);
+		addListener('#startover', 'click', clickStartOverButton);
 		return;
 	}
 	$('#question').empty();
 	$('#rightbox').empty();
 	$('#bottombox').empty();
+	$('#imgbox1').empty();
+	$('#imgbox2').empty();
 
 	movie = null;
 	movie = getMovie();
+
 	updateCenterBoxContent(movie);
+	createImgBoxContent('#imgbox1', 'img1');
 	createBottomBoxContent(movie);
+	createImgBoxContent('#imgbox2', 'img2');
+	
 	timer.reset();
 	timer.start();
 }
@@ -224,7 +248,9 @@ function createBoxContents() {
 	createLeftBoxContent();
 	createCenterBoxContent(movie);
 	//createRightBoxContent();
+	createImgBoxContent('#imgbox1', 'img1');
 	createBottomBoxContent(movie);
+	createImgBoxContent('#imgbox2', 'img2');
 	timer.start();
 }
 
@@ -278,13 +304,7 @@ function createComment(comment) {
 	//var msg = '<p></p><p>' + comment + '</p>';
 	return ('<p></p><p>' + comment + '</p>');
 }
-//function createRightBoxContent() {
-//	var obj = $('<h3 id="result"><h3>');
-//	obj = $('<p id="comment"></p>');
-//	$('#rightbox').append(obj);
-//function updateRightBox() {
 
-//}
 function createBottomBoxContent(movie) {
 	var ul = $('<ul class="list-group text-center" id="choices">');
 	for (var i = 0; i < movie.choices.length; i++) {
@@ -294,6 +314,22 @@ function createBottomBoxContent(movie) {
 	}
 	$('#bottombox').append(ul);
 	addListeners();
+}
+
+function createImgBoxContent(cls, id) {
+	var thumbnail = $('<div>').addClass('thumbnail');
+	var img = $('<img>').attr('id', id).attr('src', '').attr('alt', '');
+	thumbnail.append(img);
+	$(cls).append(thumbnail);
+}
+function updateImgBox(movie) {
+	if (movie == null) {
+		$('#img1').attr('src', '').attr('alt', '');
+		$('#img2').attr('src', '').attr('alt', '');
+	} else {
+		$('#img1').attr('src', imgPath + movie.img1).attr('alt', movie.answer);
+		$('#img2').attr('src', imgPath + movie.img2).attr('alt', movie.answer);
+	}
 }
 // Helper functions
 
@@ -323,15 +359,8 @@ $(document).ready(readyFn);
 
 function readyFn() {
 
-
-	if (isFirstTime) {
-		movies = loadData();
-		isFirstTime = false;
-		gamesRemaining = movies.length;
-	}
-		
-	createInitialFrame();
-
+	initialize();
+	createInitialFrame()
 }
 
 // Game Data
@@ -342,15 +371,17 @@ var gameData = [
 	question: "Norma Jeane Mortenson was better known under her stage name:",
 	choices: ["Natalie Wood", "Doris Day", "Lauren Bacall", "Marilyn Monroe"],
 	comment: "Marilyn Monroe, born June 1, 1926,  was an American actress and model. Famous for playing 'dumb blonde' characters, she became one of the most popular sex symbols of the 1950s, emblematic of the era's attitudes towards sexuality.",
-	img: "marilyn.jpg"
+	img1: "marilyn.jpg",
+	img2: "marilyn.jpg"
 },
 
 {
 	answer: "Peter Fonda and Dennis Hopper",
 	question: "What actors play the main characters in the American road movie Easy Rider?",
 	choices: ["Clint Eastwood and Burt Reynolds", "Warren Beatty and Alan Alda", "Peter Fonda and Dennis Hopper", "Dustin Hoffman and Paul Newman"],
-	comment: "",
-	img: "peterfonda.jpg"
+	comment: "This is a comment",
+	img1: "peterfonda.jpg",
+	img2: "peterfonda.jpg"
 },
 
 {
@@ -358,7 +389,8 @@ var gameData = [
 	question: "Who plays the leading character in The Thomas Crown Affair from 1968?",
 	choices: ["Steve McQueen", " Clint Eastwood", "Albert Finney", "George Segal"],
 	comment: "The Thomas Crown Affair is a 1968 film directed and produced by Norman Jewison. Steve McQueen plays the leading character, Thomas Crown. Faye Dunaway plays the investigator, Vicki Anderson. The film was nominated for two Academy Awards, winning Best Original Song for Michel Legrand's Windmills of Your Mind",
-	img: "crownaffair.jpg"
+	img1: "crownaffair.jpg",
+	img2: "crownaffair.jpg"
 }
 /*
 var mv2 = {
