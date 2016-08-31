@@ -127,10 +127,7 @@ function removeListeners() {
 	removeListener('.choice', 'mouseleave', mouseleaveChoice);
 	removeListener('.choice', 'click', clickChoice);
 }
-// testing purpose only
-function clickLeftBox() {
-	startNewQuestion();
-}
+
 function clickStartButton() {
 	// remove start button
 	$(this).remove();
@@ -229,10 +226,8 @@ function startNewQuestion() {
 	movie = getMovie();
 
 	updateCenterBoxContent(movie);
-	//createImgBoxContent('#imgbox1', 'img1');
 	createBottomBoxContent(movie);
-	//createImgBoxContent('#imgbox2', 'img2');
-	
+
 	timer.reset();
 	timer.start();
 }
@@ -250,10 +245,8 @@ function createBoxContents() {
 	movie = getMovie();
 	createLeftBoxContent();
 	createCenterBoxContent(movie);
-	//createRightBoxContent();
-	//createImgBoxContent('#imgbox1', 'img1');
 	createBottomBoxContent(movie);
-	//createImgBoxContent('#imgbox2', 'img2');
+
 	timer.start();
 }
 
@@ -269,7 +262,6 @@ function createLeftBoxContent() {
 	obj.append($(line3));
 	obj.append($(line4));
 	updateLeftBoxContent();
-	addListener('#leftbox', 'click', clickLeftBox);
 }
 
 function updateLeftBoxContent() {
@@ -311,7 +303,6 @@ function createResult(result, answer) {
 	return msg;
 }
 function createComment(comment) {
-	//var msg = '<p></p><p>' + comment + '</p>';
 	return ('<p></p><p>' + comment + '</p>');
 }
 
@@ -358,7 +349,7 @@ function loadData() {
 	}
 	return arr;
 }
-// Snippet from mozilla developer network
+
 // Generate random integer between min(included) and max (excluded)
 function getRandomInt(min, max) {
 	var min = Math.ceil(min);
@@ -570,30 +561,3 @@ var gameData = [
 }
 
 ];
-/*
-{
-	answer: "John Wayne",
-	question: "Which actor plays the main character in the 1963 movie Donovan's Reef?",
-	choices: ["Michael Caine", "John Wayne", "Peter O'Toole", " Rod Steiger"],
-	comment: "Donovan's Reef is a 1963 American film directed by John Ford. The leading character Michael Patrick Donovan is played by John Wayne. It was Wayne's last film together with director John Ford. ",
-	img1: "reef.jpg",
-	img2: "reef2.jpg"
-},
-{
-	answer: "Marseille",
-	question: "In the movie The Count of Monte Cristo, the leading character is a sailor wrongfully convicted and imprisoned. What is the salor's home port?",
-	choices: ["Port of Calais", "Marseille", "Lehvare", "Corsica"],
-	comment: "The Count of Monte Cristo is a 2002 adventure drama film. It follows the general plot of the novel with some changes in the relationships between major characters.",
-	img1: "cristo.jpg",
-	img2: "monte.jpg"
-}
-{
-	answer: "",
-	question: "",
-	choices: ["", "", "", ""],
-	comment: "",
-	img1: "",
-	img2: ""
-}
-
-*/
