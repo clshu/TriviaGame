@@ -390,10 +390,10 @@ var gameData = [
 	question: "Norma Jeane Mortenson was better known under her stage name:",
 	choices: ["Natalie Wood", "Doris Day", "Lauren Bacall", "Marilyn Monroe"],
 	comment: "Marilyn Monroe, born June 1, 1926,  was an American actress and model. Famous for playing 'dumb blonde' characters, she became one of the most popular sex symbols of the 1950s, emblematic of the era's attitudes towards sexuality.",
-	img1: "marilyn2.jpg",
+	img1: "marilyn1.jpeg",
 	img2: "marilyn.jpg"
-},
-
+}
+/*
 {
 	answer: "Peter Fonda and Dennis Hopper",
 	question: "What actors play the main characters in the American road movie Easy Rider?",
@@ -439,14 +439,6 @@ var gameData = [
 	img2: "psycho.jpg"
 },
 
-{
-	answer: "John Wayne",
-	question: "Which actor plays the main character in the 1963 movie Donovan's Reef?",
-	choices: ["Michael Caine", "John Wayne", "Peter O'Toole", " Rod Steiger"],
-	comment: "Donovan's Reef is a 1963 American film directed by John Ford. The leading character Michael Patrick Donovan is played by John Wayne. It was Wayne's last film together with director John Ford. ",
-	img1: "reef.jpg",
-	img2: "reef2.jpg"
-},
 
 {
 	answer: "Elizabeth Taylor",
@@ -575,8 +567,18 @@ var gameData = [
 	comment: "The Good, the Bad and the Ugly is a 1966 Italian epic Spaghetti Western film directed by Sergio Leone known for his use of long shots and close-up cinematography, and his distinctive use of violence, tension, and stylistic gunfights. It is now seen as a highly influential example of the Western film genre and one of the greatest films of all time.",
 	img1: "eastwood.jpeg",
 	img2: "goodbadugly.jpg"
+}
+*/
+];
+/*
+{
+	answer: "John Wayne",
+	question: "Which actor plays the main character in the 1963 movie Donovan's Reef?",
+	choices: ["Michael Caine", "John Wayne", "Peter O'Toole", " Rod Steiger"],
+	comment: "Donovan's Reef is a 1963 American film directed by John Ford. The leading character Michael Patrick Donovan is played by John Wayne. It was Wayne's last film together with director John Ford. ",
+	img1: "reef.jpg",
+	img2: "reef2.jpg"
 },
-
 {
 	answer: "Marseille",
 	question: "In the movie The Count of Monte Cristo, the leading character is a sailor wrongfully convicted and imprisoned. What is the salor's home port?",
@@ -585,9 +587,6 @@ var gameData = [
 	img1: "cristo.jpg",
 	img2: "monte.jpg"
 }
-
-];
-/*
 {
 	answer: "",
 	question: "",
