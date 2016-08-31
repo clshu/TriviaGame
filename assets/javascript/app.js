@@ -549,7 +549,7 @@ var gameData = [
 	answer: "1975",
 	question: "In Good Will Hunting, Will is particularly struck by Sean's story of how he met his wife by giving up his ticket to the historic game six of this year's World Series. Which year of World Series Sean gave up?",
 	choices: ["1974", "1975", "1976", "1977"],
-	comment: "Good Will Hunting is a 1997 American drama film. Written by Affleck and Damon. It was nominated for nine Academy Awards and wond two.",
+	comment: "Good Will Hunting is a 1997 American drama film. Written by Affleck and Damon. It was nominated for nine Academy Awards and won two.",
 	img1: "will.jpeg",
 	img2: "goodwill.jpg"
 },
