@@ -9,8 +9,8 @@ var movie = null;
 var timeOutId = null;
 
 // Contants
-var maxTime = 5; // in seconds
-var delayTime = 5; // in seconds
+var maxTime = 20; // in seconds, max time allowed to answer the question
+var delayTime = 10; // in seconds, delay netween 2 questions
 var boxClass = 'col-sm-4 rowbox';
 //var boxShiftClass = 'col-sm-4 col-sm-offset-4 rowbox';
 var div = '<div>';
@@ -392,8 +392,8 @@ var gameData = [
 	comment: "Marilyn Monroe, born June 1, 1926,  was an American actress and model. Famous for playing 'dumb blonde' characters, she became one of the most popular sex symbols of the 1950s, emblematic of the era's attitudes towards sexuality.",
 	img1: "marilyn1.jpeg",
 	img2: "marilyn.jpg"
-}
-/*
+},
+
 {
 	answer: "Peter Fonda and Dennis Hopper",
 	question: "What actors play the main characters in the American road movie Easy Rider?",
@@ -568,7 +568,7 @@ var gameData = [
 	img1: "eastwood.jpeg",
 	img2: "goodbadugly.jpg"
 }
-*/
+
 ];
 /*
 {
