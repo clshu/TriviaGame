@@ -75,6 +75,7 @@ var timer = {
 
 // Functions
 function initialize() {
+	// initialize global variables and load data
 	movies = loadData();
 	wins = 0;
 	losses = 0;
@@ -83,6 +84,10 @@ function initialize() {
 }
 
 function createInitialFrame() {
+	// Create initial frame in this order
+	// row1: leftbox, centerbox, rightbox
+	// row2: imgbox1, bottombox, imgbox2
+	// Create start button in bottombox
 	var box, row1, row2, button, obj;
 	// create 2 rows
 	row1 = createElement('row', 'row1');
@@ -118,22 +123,25 @@ function removeListener(sel, event, fn) {
 	$(sel).off(event, fn);
 }
 function addListeners() {
+	// add listeners for .choice ul list items
 	addListener('.choice', 'mouseenter', mouseenterChoice);
 	addListener('.choice', 'mouseleave', mouseleaveChoice);
 	addListener('.choice', 'click', clickChoice);
 }
 function removeListeners() {
+	// remove listeners for .choice ul list items
 	removeListener('.choice', 'mouseenter', mouseenterChoice);
 	removeListener('.choice', 'mouseleave', mouseleaveChoice);
 	removeListener('.choice', 'click', clickChoice);
 }
 
 function clickStartButton() {
-	// remove start button
+	// remove start button first
 	$(this).remove();
 	createBoxContents();
 }
 function clickStartOverButton() {
+	// remove contents in all 6 boxes first
 	$('.rowbox').empty();
 	initialize();
 	createBoxContents();
@@ -141,16 +149,19 @@ function clickStartOverButton() {
 function clickChoice() {
 	var result, comment;
 	var id = $(this).attr('id');
+	// remove choice-focus color
 	$(this).removeClass('choice-focus');
 	if (id == movie.answer) {
+		// answer matched, add choice-correct color and update stats, result
 		$(this).addClass('choice-correct');
 		result = 'Correct';
 		wins++;
 
 	} else { 
+		// answer not matched, add choice-incorrect color to selected list item
 		$(this).addClass('choice-incorrect');
 
-		// find the correct answer and mark it 'choice-correct'
+		// find the correct list item and add choice-correct color
 		var siblings = $(this).siblings();
 		for (var i = 0; i < siblings.length; i++) {
 			if ($(siblings[i]).attr('id') == movie.answer) {
@@ -162,32 +173,42 @@ function clickChoice() {
 		losses++;
 	}
 	questionsRemaing--;
+	// update stats
 	updateLeftBoxContent();
+	// load result and comment
 	updateRightBoxContent(result, movie);
+	// load images
 	updateImgBox(movie);
 
 	timer.stop();
+	// make ul list items unclickable
 	removeListeners();
+	// set delay before starting new question
 	if (timeOutId == null) {
 		timeOutId = setTimeout(startNewQuestion, delayTime * 1000);
 	}
 }
+// use mouseenter and mouseleave to toggle colors
 function mouseenterChoice() {
 	$(this).addClass('choice-focus');
-
 }
 function mouseleaveChoice() {
 	$(this).removeClass('choice-focus');
-
 }
 function processTimeUp() {
 	unanswered++;
 	questionsRemaing--;
+	// update stats
 	updateLeftBoxContent();
+	// load result and comment
 	updateRightBoxContent('Time Up', movie);
+	// load images
 	updateImgBox(movie);
-	var children = $('#choices').children();
 
+	var children = $('#choices').children();
+	// find correct list item and add choice-correct color
+	// also remove choice-focus color in case the mouse cursor stays on
+	// one of list item when time is up
 	for (var i = 0; i < children.length; i++) {
 		// Use both way to access children for practice
 		if (children.eq(i).hasClass('choice-focus')) {
@@ -197,8 +218,12 @@ function processTimeUp() {
 			$(children[i]).addClass('choice-correct');
 		}
 	}
-
+	// make ul list items unclickable
 	removeListeners();
+
+	// timer is reset by timer.countDown at this point
+
+	// set delay before starting a new question
 	if (timeOutId == null) {
 	 	timeOutId = setTimeout(startNewQuestion, delayTime * 1000);
 	}
@@ -210,22 +235,26 @@ function startNewQuestion() {
 		timeOutId = null;
 	}
 	if (questionsRemaing == 0) {
+		// if end of game, add start over button in bottombox
 		$('#bottombox').empty();
 		var button = createButton('startover', 'Start Over?');
 		$('#bottombox').append(button);
 		addListener('#startover', 'click', clickStartOverButton);
 		return;
 	}
+	// Leave leftbox(with all stats) and timer section intact,
+	// clean up everything else
 	$('#question').empty();
 	$('#rightbox').empty();
 	$('#bottombox').empty();
 	$('#imgbox1').empty();
 	$('#imgbox2').empty();
-
+	// get a new move for the new question
 	movie = null;
 	movie = getMovie();
-
+	// load timer and new question
 	updateCenterBoxContent(movie);
+	// load choices for the answer and add listeners
 	createBottomBoxContent(movie);
 
 	timer.reset();
@@ -242,15 +271,20 @@ function createButton(id, text) {
 	return button;
 }
 function createBoxContents() {
+	// get new movie for the question
 	movie = getMovie();
+	// load stats
 	createLeftBoxContent();
+	// load timer and question
 	createCenterBoxContent(movie);
+	// load choices for the answer and add listeners
 	createBottomBoxContent(movie);
 
 	timer.start();
 }
 
 function createLeftBoxContent() {
+	// leftbox contains wins, losses, unanswered, and questionsRemaing
 	var obj = createElement('well', 'leftbox-container');
 	var line1 = '<p>Wins: <span id="wins"></span></p><p></p>';
 	var line2 = '<p>Losses: <span id="losses"></span></p><p></p>';
@@ -265,12 +299,14 @@ function createLeftBoxContent() {
 }
 
 function updateLeftBoxContent() {
+	// update stats
 	$('#wins').html(wins);
 	$('#losses').html(losses);
 	$('#unanswered').html(unanswered);
 	$('#questionsRemaing').html(questionsRemaing);
 }
 function createCenterBoxContent(movie) {
+	// centerbox contains timer and question
 	var obj = createElement('well','remaining');
 	obj.append($(timeRemaining));
 	$('#centerbox').append(obj);
@@ -280,11 +316,13 @@ function createCenterBoxContent(movie) {
 	updateCenterBoxContent(movie);	
 }
 function updateCenterBoxContent(movie) {
+	// update timer display and looad question
 	var str = timer.timeConverter(maxTime);
 	$('#timer').html(str);
 	$('#question').html(movie.question);
 }
 function updateRightBoxContent(result, movie) {
+	// load result and comment to rightbox
 	var obj = createElement('well', 'rightbox-container');
 	var resultStr = createResult(result, movie.answer);
 	obj.append($(resultStr));
@@ -307,6 +345,8 @@ function createComment(comment) {
 }
 
 function createBottomBoxContent(movie) {
+	// create ul list items in bottombox to hold choices for the answer
+	// also add listeners
 	var ul = $('<ul class="list-group text-center" id="choices">');
 	for (var i = 0; i < movie.choices.length; i++) {
 		var li = '<li class="list-group-item choice">' + movie.choices[i] + '</li>';
@@ -318,6 +358,7 @@ function createBottomBoxContent(movie) {
 }
 
 function createImgBoxContent(cls, id) {
+	// load images to imgbox1 and imgbox2
 	var path;
 	var thumbnail = $('<div>').addClass('thumbnail').attr('id', id);
 	if (cls == "#imgbox1") {
@@ -330,19 +371,15 @@ function createImgBoxContent(cls, id) {
 	$(cls).append(thumbnail);
 }
 
-function updateImgBox(movie) {
-	if (movie == null) {
-		$('#imgbox1').empty();
-		$('#imgbox2').empty();
-	} else {
-		createImgBoxContent("#imgbox1", "img1"); 
-		createImgBoxContent("#imgbox2", "img2");
-	}
+function updateImgBox(movie) {	
+	createImgBoxContent("#imgbox1", "img1"); 
+	createImgBoxContent("#imgbox2", "img2");
 }
 
 // Helper functions
 
 function loadData() {
+	// load game data
 	var arr = [];
 	for (var i = 0; i < gameData.length; i++) {
 		arr.push(gameData[i]);
@@ -357,9 +394,17 @@ function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min)) + min;
 }
 function getMovie() {
+	// randomly select a movie from 'movies'
+	// then remove slected movie from 'movies'
+	// to ensure the same movie won't be selected again
+
+	// get random number
 	var index = getRandomInt(0, movies.length);
+	// save a deep copy 
 	var obj = Object.assign({}, movies[index]);
+	// reomove it
 	movies.splice(index, 1);
+	// return saved copy
 	return obj;
 }
 // ===== Execution ====
