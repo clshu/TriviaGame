@@ -1,6 +1,8 @@
 .container {
 	width: 100%;
 	background-image: url('../images/movie.jpg');
+	/* background-repeat: no-repeat; */
+	/* background-position: center center; */
 }
 
 #row1, #row2 {
@@ -20,12 +22,14 @@
 	font-weight: bolder;
 	font-style: italic;
 }
+/*
 .hidden {
 	display: none;
 }
+*/
 #question {
 	height: 65%;
-	margin: 10% auto 0 auto;
+	margin: 2% auto 0 auto;
 }
 #choices {
 	margin-top: 10px;
@@ -50,11 +54,23 @@
 #rightbox h4 {
 	text-align: center;
 }
+.thumbnail img{
+	max-width: 98%;
+	min-height: 210px;
+	height: 210px;
+	
+}
 /*
 #rightbox p {
 	font-size: 20px;
 }
 */
+/*
+.thumbnail {
+	max-width: 98%;
+	height: auto;
+	width: auto;	
+}
 .illustration img {
     max-width: 98%;
     height: auto;
@@ -63,4 +79,4 @@
     border: 2px solid #f2f2f2;
     background-color: #fefefe;
     border-radius: 8px;
-}
+}*/

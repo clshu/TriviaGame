@@ -4,13 +4,13 @@ var movies = [];
 var wins;
 var losses;
 var unanswered;
-var gamesRemaining;
+var questionsRemaing;
 var movie = null;
 var timeOutId = null;
 
 // Contants
 var maxTime = 5; // in seconds
-var delaytime = 5; // in seconds
+var delayTime = 5; // in seconds
 var boxClass = 'col-sm-4 rowbox';
 //var boxShiftClass = 'col-sm-4 col-sm-offset-4 rowbox';
 var div = '<div>';
@@ -79,7 +79,7 @@ function initialize() {
 	wins = 0;
 	losses = 0;
 	unanswered = 0;
-	gamesRemaining = movies.length;
+	questionsRemaing = movies.length;
 }
 
 function createInitialFrame() {
@@ -164,7 +164,7 @@ function clickChoice() {
 		result = 'Incorrect';
 		losses++;
 	}
-	gamesRemaining--;
+	questionsRemaing--;
 	updateLeftBoxContent();
 	updateRightBoxContent(result, movie);
 	updateImgBox(movie);
@@ -172,7 +172,7 @@ function clickChoice() {
 	timer.stop();
 	removeListeners();
 	if (timeOutId == null) {
-		timeOutId = setTimeout(startNewQuestion, 5000);
+		timeOutId = setTimeout(startNewQuestion, delayTime * 1000);
 	}
 }
 function mouseenterChoice() {
@@ -185,7 +185,7 @@ function mouseleaveChoice() {
 }
 function processTimeUp() {
 	unanswered++;
-	gamesRemaining--;
+	questionsRemaing--;
 	updateLeftBoxContent();
 	updateRightBoxContent('Time Up', movie);
 	updateImgBox(movie);
@@ -203,7 +203,7 @@ function processTimeUp() {
 
 	removeListeners();
 	if (timeOutId == null) {
-	 	timeOutId = setTimeout(startNewQuestion, 5000);
+	 	timeOutId = setTimeout(startNewQuestion, delayTime * 1000);
 	}
 }
 
@@ -212,7 +212,7 @@ function startNewQuestion() {
 		clearTimeout(timeOutId);
 		timeOutId = null;
 	}
-	if (gamesRemaining == 0) {
+	if (questionsRemaing == 0) {
 		$('#bottombox').empty();
 		var button = createButton('startover', 'Start Over?');
 		$('#bottombox').append(button);
@@ -262,7 +262,7 @@ function createLeftBoxContent() {
 	var line1 = '<p>Wins: <span id="wins"></span></p><p></p>';
 	var line2 = '<p>Losses: <span id="losses"></span></p><p></p>';
 	var line3 = '<p>Unanswered: <span id="unanswered"></span></p><p></p>';
-	var line4 = '<p>Questions Remaining: <span id="gamesRemaining"></span></p><p></p>';
+	var line4 = '<p>Questions Remaining: <span id="questionsRemaing"></span></p><p></p>';
 	$('#leftbox').append(obj);
 	obj.append($(line1));
 	obj.append($(line2));
@@ -276,7 +276,7 @@ function updateLeftBoxContent() {
 	$('#wins').html(wins);
 	$('#losses').html(losses);
 	$('#unanswered').html(unanswered);
-	$('#gamesRemaining').html(gamesRemaining);
+	$('#questionsRemaing').html(questionsRemaing);
 }
 function createCenterBoxContent(movie) {
 	var obj = createElement('well','remaining');
@@ -384,12 +384,13 @@ function readyFn() {
 // Game Data
 
 var gameData = [
+
 {
 	answer: "Marilyn Monroe",
 	question: "Norma Jeane Mortenson was better known under her stage name:",
 	choices: ["Natalie Wood", "Doris Day", "Lauren Bacall", "Marilyn Monroe"],
 	comment: "Marilyn Monroe, born June 1, 1926,  was an American actress and model. Famous for playing 'dumb blonde' characters, she became one of the most popular sex symbols of the 1950s, emblematic of the era's attitudes towards sexuality.",
-	img1: "marilyn.jpg",
+	img1: "marilyn2.jpg",
 	img2: "marilyn.jpg"
 },
 
@@ -397,8 +398,8 @@ var gameData = [
 	answer: "Peter Fonda and Dennis Hopper",
 	question: "What actors play the main characters in the American road movie Easy Rider?",
 	choices: ["Clint Eastwood and Burt Reynolds", "Warren Beatty and Alan Alda", "Peter Fonda and Dennis Hopper", "Dustin Hoffman and Paul Newman"],
-	comment: "This is a comment",
-	img1: "peterfonda.jpg",
+	comment: "Easy Rider is a 1969 American road movie written by Peter Fonda, Dennis Hopper, and Terry Southern, produced by Fonda and directed by Hopper. As a landmark counterculture film, the film was added to the Library of Congress National Registry in 1998.",
+	img1: "peterdennis.jpeg",
 	img2: "peterfonda.jpg"
 },
 
@@ -406,18 +407,194 @@ var gameData = [
 	answer: "Steve McQueen",
 	question: "Who plays the leading character in The Thomas Crown Affair from 1968?",
 	choices: ["Steve McQueen", " Clint Eastwood", "Albert Finney", "George Segal"],
-	comment: "The Thomas Crown Affair is a 1968 film directed and produced by Norman Jewison. Steve McQueen plays the leading character, Thomas Crown. Faye Dunaway plays the investigator, Vicki Anderson. The film was nominated for two Academy Awards, winning Best Original Song for Michel Legrand's Windmills of Your Mind",
-	img1: "crownaffair.jpg",
+	comment: "The Thomas Crown Affair is a 1968 film directed and produced by Norman Jewison. Steve McQueen plays the leading character, Thomas Crown. Faye Dunaway plays the investigator, Vicki Anderson. The film was nominated for two Academy Awards, winning Best Original Song for Michel Legrand's Windmills of Your Mind",	
+	img1: "mcqueen.jpeg",
 	img2: "crownaffair.jpg"
+},
+
+{
+	answer: "Gregory Peck",
+	question: "The film To Kill a Mockingbird is based on a novel. Who is the leading actor?",
+	choices: ["Dean Martin", "Gregory Peck", "Cary Grant", "James Stewart"],
+	comment: "To Kill a Mockingbird is a 1962 American film directed by Robert Mulligan. The film is based on a novel by Harper Lee published in 1960.",
+	img1: "peck.jpeg",
+	img2: "mockingbird.jpg"
+},
+
+{
+	answer: "Anne Bancroft",
+	question: "Who plays the role as Mrs. Robinson in the 1967 movie The Graduate?",
+	choices: ["Jeanne Moreau", "Lauren Bacall", "Anne Bancroft", "Angie Dickinson"],
+	comment: "The Graduate is a 1967 American comedy-drama film directed by Mike Nichols. The role as the older woman, Mrs. Robinson, is played by Anne Bancroft.",
+	img1: "bancroft.jpg",
+	img2: "graduate.jpg"
+},
+
+{
+	answer: "Janet Leigh",
+	question: "Who plays the role as Marion Crane in the 1960 American film Psycho?",
+	choices: ["Doris Day", "Natalie Wood", "Goldie Hawn", "Janet Leigh"],
+	comment: "Janet Leigh was awarded the Golden Globe Award for Best Supporting Actress and received an Academy Award nomination for her role as Marion Crane in Psycho.",
+	img1: "leigh.jpeg",
+	img2: "psycho.jpg"
+},
+
+{
+	answer: "John Wayne",
+	question: "Which actor plays the main character in the 1963 movie Donovan's Reef?",
+	choices: ["Michael Caine", "John Wayne", "Peter O'Toole", " Rod Steiger"],
+	comment: "Donovan's Reef is a 1963 American film directed by John Ford. The leading character Michael Patrick Donovan is played by John Wayne. It was Wayne's last film together with director John Ford. ",
+	img1: "reef.jpg",
+	img2: "reef2.jpg"
+},
+
+{
+	answer: "Elizabeth Taylor",
+	question: "Who plays Cleopatra in the 1963 movie directed by Joseph L. Mankiewicz?",
+	choices: ["Anne Bancroft", "Elizabeth Taylor", "Katharine Hepburn", "Sophia Loren"],
+	comment: "Cleopatra is a 1963 epic film directed by Joseph L. Mankiewicz. Adjusted for inflation, it is one of the most expensive films ever made, partly because production troubles. The film nearly bankrupted 20th Century Fox.",
+	img1: "taylor.jpeg",
+	img2: "cleopatra.jpg"
+},
+
+{
+	answer: "Aqaba",
+	question: "In Lawrence of Arabia, the British officer Lawrence was sent to the Middle East desert to start a revolt against Ottoman Empire during WW I. What is the first city he captured from the enemy?",
+	choices: ["Medina", "Mecca", "Aqaba", "Riyadh"],
+	comment: "Lawrence of Arabia is a 1962 epic historical drama film based on the life of T. E. Lawrence. The film stars Peter O'Toole in the title role. It is widely considered one of the greatest and most influential films in the history of cinema.",
+	img1: "otoole.jpeg",
+	img2: "lawrence.jpeg"
+},
+
+{
+	answer: "Galapagos",
+	question: "In Master and Commander, the British Captain Jack Aubrey pursued his enemy's ship to these islands, which are also rich with flora and fauna. What is the islands' name?",
+	choices: ["Hawaii", "Galapagos", "Tahiti", "Fiji"],
+	comment: "Master and Commander: The Far Side of the World is a 2003 American epic historical drama film. The film's plot and characters are adapted from three novels in author Patrick O'Brian's Aubrey–Maturin series. It was nominated for 10 Oscars.",
+	img1: "galapagos.jpeg",
+	img2: "master.jpeg"
+},
+
+{
+	answer: "Mondoshawans",
+	question: "In The Fifth Element, the leading female character Leeloo is an alien sent to save the Earth. What is the name of her alien race?",
+	choices: ["Akritirian", "Plavalaguna", "Mangalores", "Mondoshawans"],
+	comment: "The Fifth Element (French: Le Cinquième Élément) is a 1997 English-language French science fiction action film directed and co-written by Luc Besson. Besson started writing the story that became The Fifth Element when he was 16 years old; he was 38 when the film opened in cinemas.",
+	img1: "leeloo.jpeg",
+	img2: "fifth.jpeg"
+},
+
+{
+	answer: "Nautilus",
+	question: "In this Sci-Fi movie classic, it involves sea monsters, giant squids and a mysterious Captain Nemo. What's the name of his vessel?",
+	choices: ["Poseidon", "Nautilus", "Oceanus", "Thetis"],
+	comment: "20,000 Leagues Under the Sea is a 1954 American Technicolor adventure film and the first science fiction film shot in CinemaScope.  The film is adapted from Jules Verne's 19th-century novel Twenty Thousand Leagues Under the Sea. It is considered an early precursor of the steampunk genre",
+	img1: "squid.jpeg",
+	img2: "20000.jpeg"
+},
+
+{
+	answer: "Edelweiss",
+	question: "In The Sound of Music, Captain Georg von Trapp sings this song as a goodbye to his homeland, while using Austria's national flower as a symbol to declare his loyalty to the country. What is the song's name?",
+	choices: ["The Lonely Goatherd", "Do-Re-Mi", "No Way to Stop It", "Edelweiss"],
+	comment: "The Sound of Music is a 1965 American musical drama film, an adaptation of the 1959 Broadway musical The Sound of Music. In 2001, the United States Library of Congress selected the film for preservation in the National Film Registry, finding it \"culturally, historically, or aesthetically significant\".",
+	img1: "trapps.jpeg",
+	img2: "sound.jpeg"
+},
+
+
+{
+	answer: "Apocalypse Now",
+	question: "In this Vietnam War movie, the leading character, an US Army Captain, was sent to the jungle to terminate a lunatic US Colonel. What is title of the move?",
+	choices: ["The Deer Hunter", "Platoon", "Apocalypse Now", "Full Metal Jacket"],
+	comment: "Apocalypse Now is a 1979 American epic war adventure film set during the Vietnam War, produced and directed by Francis Ford Coppola. Apocalypse Now was released to universal acclaim and considered to be one of the greatest films ever made.",
+	img1: "apocalypse1.jpeg",
+	img2: "apocalypse.jpeg"
+},
+
+
+{
+	answer: "Buffalo Bill",
+	question: "In The Silence of the Lambs, what is the serial killer's nick name?",
+	choices: ["The Cannibal", "Killer Clown", "Tennessee Jack the Ripper", "Buffalo Bill"],
+	comment: "The Silence of the Lambs is a 1991 American psychological thriller film. It was only the third film to win Academy Awards in all the top five categories. It is also the first (and so far only) Best Picture winner widely considered to be a horror film, and only the third such film to be nominated in the category",
+	img1: "lector.jpeg",
+	img2: "silence.jpeg"
+},
+
+{
+	answer: "1975",
+	question: "In Good Will Hunting, Will is particularly struck by Sean's story of how he met his wife by giving up his ticket to the historic game six of this year's World Series. Which year of World Series Sean gave up?",
+	choices: ["1974", "1975", "1976", "1977"],
+	comment: "Good Will Hunting is a 1997 American drama film. Written by Affleck and Damon. It was nominated for nine Academy Awards and wond two.",
+	img1: "will.jpeg",
+	img2: "goodwill.jpg"
+},
+
+{
+	answer: "Lyndon B. Johnson",
+	question: "In Forrest Gump, Forrest Gump is awarded the Medal of Honor, presented to him by this President at the White House. What is the President's name?",
+	choices: ["Richard Nixon", "Lyndon B. Johnson", "Gerald Ford", "John F. Kennedy"],
+	comment: "Forrest Gump is a 1994 American comedy-drama film based on the 1986 novel of the same name by Winston Groom. The film became a commercial success and won 6 Academy Awards.",
+	img1: "forrest-lbj.jpg",
+	img2: "gump.jpeg"
+},
+
+
+{
+	answer: "Unicorn",
+	question: "In Blade Runner, officer Gaff likes to make tin-foil origami animals. Deckard recieved one at the end of the movie. What kind of origami animal is that?",
+	choices: ["Unicorn", "Crane", "Goose", "Horse"],
+	comment: "Blade Runner is a 1982 American science fiction tech-noir film. Blade Runner initially polarized critics: some were displeased with the pacing, while others enjoyed its thematic complexity.",
+	img1: "harrisonford.jpeg",
+	img2: "bladerunner.jpeg"
+},
+
+{
+	answer: "Cisco",
+	question: "In Dances with Wolves, First Lieutenant Dunbar has a very fast and smart horse. It saves him from the enemy fire and escapes from being captured by Sioux kids by itself. What is the name of the horse?",
+	choices: ["Cisco", "Tatanka", "Lightning", "Lakota"],
+	comment: "Dances with Wolves is a 1990 American epic Western film directed by, produced by, and starring Kevin Costner. It won seven Academy Awards including Best Picture. The film is credited as a leading influence for the revitalization of the Western genre of filmmaking in Hollywood.",
+	img1: "dunbar.jpeg",
+	img2: "wolves.jpeg"
+},
+
+{
+	answer: "Gene Hackman",
+	question: "In the Western movie Unforgiven, who plays the role of the ruthless local sheriff Little Bill?",
+	choices: ["Clint Eastwood", "Gene Hackman", "Morgan Freeman", "Richard Harris"],
+	comment: "Unforgiven is a 1992 dark Western that deals frankly with the uglier aspects of violence and how complicated truths are distorted into simplistic myths about the Old West, it stars and directed by Clint Eastwood. Eastwood dedicated the movie to deceased directors and mentors Don Siegel and Sergio Leone. The film won four Academy Awards.",
+	img1: "littlebill.jpeg",
+	img2: "unforgiven.jpeg"
+},
+
+{
+	answer: "Unknown",
+	question: "In The Good, the Bad and the Ugly, three leading characters pursue the stolen cache of Confederate Gold buried under a grave. What is the name on that grave?",
+	choices: ["Arch Stanton", "Angel Eyes", "Unknown", "Bill Carson"],
+	comment: "The Good, the Bad and the Ugly is a 1966 Italian epic Spaghetti Western film directed by Sergio Leone known for his use of long shots and close-up cinematography, and his distinctive use of violence, tension, and stylistic gunfights. It is now seen as a highly influential example of the Western film genre and one of the greatest films of all time.",
+	img1: "eastwood.jpeg",
+	img2: "goodbadugly.jpg"
+},
+
+{
+	answer: "Marseille",
+	question: "In the movie The Count of Monte Cristo, the leading character is a sailor wrongfully convicted and imprisoned. What is the salor's home port?",
+	choices: ["Port of Calais", "Marseille", "Lehvare", "Corsica"],
+	comment: "The Count of Monte Cristo is a 2002 adventure drama film. It follows the general plot of the novel with some changes in the relationships between major characters.",
+	img1: "cristo.jpg",
+	img2: "monte.jpg"
 }
+
+];
 /*
-var mv2 = {
+{
 	answer: "",
 	question: "",
 	choices: ["", "", "", ""],
 	comment: "",
-	img: ""
+	img1: "",
+	img2: ""
 }
-*/
-];
 
+*/
