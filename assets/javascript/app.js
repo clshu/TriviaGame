@@ -12,15 +12,10 @@ var timeOutId = null;
 var maxTime = 20; // in seconds, max time allowed to answer the question
 var delayTime = 10; // in seconds, delay netween 2 questions
 var boxClass = 'col-sm-4 rowbox';
-//var boxShiftClass = 'col-sm-4 col-sm-offset-4 rowbox';
 var div = '<div>';
 var buttonStr = '<button class="btn btn-warning btn-lg">';
 var timeRemaining = '<p>The time remaining: <span id="timer"></span></p>';
-//var correctMsg = '<h3 style="color: green">Correct</h3>';
-//var incorrectMsg = '<h3 style="color: red">Incorrect</h3>';
 var imgPath = 'assets/images/';
-
-
 
 // Objects
 var timer = {
